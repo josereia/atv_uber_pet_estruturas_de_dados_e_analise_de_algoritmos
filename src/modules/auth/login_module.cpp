@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <modules/auth/auth_repository.cpp>
 #include <string>
 
 #include "components/input_component.cpp"
@@ -11,7 +12,6 @@
 #include "ftxui/util/ref.hpp"
 
 void login_module() {
-  // using namespace ftxui;
   auto screen = ScreenInteractive::TerminalOutput();
 
   std::string username;
@@ -28,7 +28,7 @@ void login_module() {
   });
 
   auto renderer = Renderer(formComponent, [&] {
-    if (username.compare("admin") == 0 && password.compare("admin") == 0) {
+    if (AuthRepository::login(username.c_str(), password.c_str())) {
       screen.ExitLoopClosure()();
     }
 
