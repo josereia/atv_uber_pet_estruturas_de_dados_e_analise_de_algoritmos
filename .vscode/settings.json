@@ -1,7 +1,8 @@
 {
   "cSpell.words": [
     "ftxui",
-    "hbox"
+    "hbox",
+    "usename"
   ],
   "files.associations": {
     "string": "cpp",

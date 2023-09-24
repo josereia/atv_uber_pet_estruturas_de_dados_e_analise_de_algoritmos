@@ -1,49 +1,43 @@
 #include <stdio.h>
 #include <string>
 
-#include "ftxui/component/captured_mouse.hpp"  // for ftxui
-#include "ftxui/component/component.hpp"       // for Input, Renderer, Vertical
-#include "ftxui/component/component_base.hpp"  // for ComponentBase
-#include "ftxui/component/component_options.hpp"  // for InputOption
-#include "ftxui/component/screen_interactive.hpp"  // for Component, ScreenInteractive
-#include "ftxui/dom/elements.hpp"  // for text, hbox, separator, Element, operator|, vbox, border
-#include "ftxui/util/ref.hpp"  // for Ref
-
-std::string user = "admin";
-char password[9] = "admin123";
+#include "components/input_component.cpp"
+#include "ftxui/component/captured_mouse.hpp"
+#include "ftxui/component/component.hpp"
+#include "ftxui/component/component_base.hpp"
+#include "ftxui/component/component_options.hpp"
+#include "ftxui/component/screen_interactive.hpp"
+#include "ftxui/dom/elements.hpp"
+#include "ftxui/util/ref.hpp"
 
 void login_module() {
-  using namespace ftxui;
+  // using namespace ftxui;
   auto screen = ScreenInteractive::TerminalOutput();
 
-  std::string title;
-  std::string user_input;
-  char password_input[9];
+  std::string username;
+  std::string password;
 
-  InputOption user_input_option;
-  Component user_input_component =
-      Input(&user_input, "Digite seu usuário", user_input_option);
+  auto usernameInputComponent =
+      input_component(&username, "Digite seu nome de usuário");
+  auto passwordInputComponent =
+      input_component(&password, "Digite sua senha", true);
 
-  InputOption password_option;
-  password_option.password = true;
-  Component password_input_component =
-      Input(password_input, "Digite sua senha", password_option);
-
-  password_option.on_enter = [&] {
-    title = "Bem-vindo(a), " + user_input + "!";
-  };
-
-  auto component = Container::Vertical({
-      user_input_component,
-      password_input_component,
+  auto formComponent = Container::Vertical({
+      usernameInputComponent,
+      passwordInputComponent,
   });
 
-  auto renderer = Renderer(component, [&] {
+  auto renderer = Renderer(formComponent, [&] {
+    if (username.compare("admin") == 0 && password.compare("admin") == 0) {
+      screen.ExitLoopClosure()();
+    }
+
     return vbox({
-               text("Bem-vindo(a)! Faça login."),
+               hbox(text("Olá! Bem-vindo(a) "), text(username) | bold),
                separator(),
-               hbox(text("Usuário: "), user_input_component->Render()),
-               hbox(text("Senha: "), password_input_component->Render()),
+               hbox(text("Nome de usuário: "),
+                    usernameInputComponent->Render()),
+               hbox(text("Senha: "), passwordInputComponent->Render()),
            }) |
            border;
   });

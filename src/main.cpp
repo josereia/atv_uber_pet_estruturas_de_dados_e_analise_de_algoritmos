@@ -5,5 +5,7 @@
 int main(void) {
   login_module();
 
+  printf("Hello, world!\n");
+
   return EXIT_SUCCESS;
 }
