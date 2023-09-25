@@ -1,5 +1,6 @@
 #include <core/database_driver.hpp>
 #include <iostream>
+#include "auth_module.hpp"
 
 namespace AuthRepository {
 bool login(const char* username, const char* password) {
@@ -17,4 +18,4 @@ bool logout() {
   int rc = DatabaseDriver::close();
   return rc == SQLITE_OK;
 };
-}  
+}  // namespace AuthRepository

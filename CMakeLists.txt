@@ -18,8 +18,8 @@ endif()
 set(SQLite_URL "https://www.sqlite.org/2023/sqlite-amalgamation-3430100.zip")
 FetchContent_Declare(
   SQLite
-  URL ${SQLite_URL}
   DOWNLOAD_EXTRACT_TIMESTAMP TRUE
+  URL ${SQLite_URL}
 )
 FetchContent_GetProperties(SQLite)
 if(NOT SQLite_POPULATED)
@@ -31,7 +31,9 @@ project(uber-pet
   VERSION 1.0.0
 )
 
-add_executable(uber-pet src/main.cpp)
+file(GLOB_RECURSE SOURCES "src/*.cpp")
+file(GLOB_RECURSE HEADERS "src/*.hpp")
+add_executable(uber-pet ${SOURCES} ${HEADERS})
 target_compile_features(uber-pet PRIVATE cxx_std_20)
 target_include_directories(uber-pet PRIVATE src)
 

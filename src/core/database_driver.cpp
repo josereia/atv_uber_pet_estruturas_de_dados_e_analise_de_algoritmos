@@ -1,3 +1,4 @@
+#include "database_driver.hpp"
 #include <sqlite3.h>
 #include <stdio.h>
 #include <iostream>

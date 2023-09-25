@@ -1,8 +1,8 @@
 #include <stdio.h>
-#include <modules/auth/auth_repository.cpp>
 #include <string>
+#include "auth_module.hpp"
 
-#include "components/input_component.cpp"
+#include "core/components/components.hpp"
 #include "ftxui/component/captured_mouse.hpp"
 #include "ftxui/component/component.hpp"
 #include "ftxui/component/component_base.hpp"
@@ -10,17 +10,22 @@
 #include "ftxui/component/screen_interactive.hpp"
 #include "ftxui/dom/elements.hpp"
 #include "ftxui/util/ref.hpp"
+#include "modules/root/root_module.hpp"
 
-void login_module() {
-  auto screen = ScreenInteractive::TerminalOutput();
+namespace AuthModule {
+void login() {
+  using namespace ftxui;
+  using namespace std;
 
-  std::string username;
-  std::string password;
+  auto screen = ftxui::ScreenInteractive::TerminalOutput();
+
+  string username;
+  string password;
 
   auto usernameInputComponent =
-      input_component(&username, "Digite seu nome de usuário");
+      Components::input(&username, "Digite seu nome de usuário", false);
   auto passwordInputComponent =
-      input_component(&password, "Digite sua senha", true);
+      Components::input(&password, "Digite sua senha", true);
 
   auto formComponent = Container::Vertical({
       usernameInputComponent,
@@ -44,3 +49,4 @@ void login_module() {
 
   screen.Loop(renderer);
 }
+}  // namespace AuthModule
