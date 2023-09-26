@@ -1,7 +1,6 @@
 #include <core/database_driver.hpp>
 #include <iostream>
 #include <modules/auth/auth_module.hpp>
-#include <modules/root/root_module.hpp>
 
 void init() {
   sqlite3* db;
@@ -26,10 +25,9 @@ void init() {
 
 int main(void) {
   init();
-
   AuthModule::login();
-  RootModule::root();
-
   DatabaseDriver::close();
+
+  exit(EXIT_SUCCESS);
   return EXIT_SUCCESS;
 }

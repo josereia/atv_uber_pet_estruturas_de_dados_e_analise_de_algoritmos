@@ -14,10 +14,9 @@
 
 namespace AuthModule {
 void login() {
-  using namespace ftxui;
   using namespace std;
 
-  auto screen = ftxui::ScreenInteractive::TerminalOutput();
+  auto screen = ftxui::ScreenInteractive::Fullscreen();
 
   string username;
   string password;
@@ -27,7 +26,7 @@ void login() {
   auto passwordInputComponent =
       Components::input(&password, "Digite sua senha", true);
 
-  auto formComponent = Container::Vertical({
+  auto formComponent = ftxui::Container::Vertical({
       usernameInputComponent,
       passwordInputComponent,
   });
@@ -35,16 +34,19 @@ void login() {
   auto renderer = Renderer(formComponent, [&] {
     if (AuthRepository::login(username.c_str(), password.c_str())) {
       screen.ExitLoopClosure()();
+      RootModule::screen();
     }
 
-    return vbox({
-               hbox(text("Olá! Bem-vindo(a) "), text(username) | bold),
-               separator(),
-               hbox(text("Nome de usuário: "),
+    return ftxui::vbox({
+               ftxui::hbox(ftxui::text("Olá! Bem-vindo(a) "),
+                           ftxui::text(username) | ftxui::bold),
+               ftxui::separator(),
+               hbox(ftxui::text("Nome de usuário: "),
                     usernameInputComponent->Render()),
-               hbox(text("Senha: "), passwordInputComponent->Render()),
+               ftxui::hbox(ftxui::text("Senha: "),
+                           passwordInputComponent->Render()),
            }) |
-           border;
+           ftxui::border;
   });
 
   screen.Loop(renderer);

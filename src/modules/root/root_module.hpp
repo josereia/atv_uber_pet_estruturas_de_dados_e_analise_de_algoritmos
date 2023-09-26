@@ -2,7 +2,7 @@
 #define root_module
 
 namespace RootModule {
-void root();
+void screen();
 }
 
 #endif

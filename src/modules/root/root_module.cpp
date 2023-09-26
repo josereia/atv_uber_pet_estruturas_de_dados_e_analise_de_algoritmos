@@ -8,61 +8,44 @@
 #include "ftxui/component/component_base.hpp"
 #include "ftxui/component/screen_interactive.hpp"
 #include "ftxui/dom/elements.hpp"
+#include "modules/chauffeur/chauffeur_module.hpp"
+#include "modules/clients/clients_module.hpp"
+#include "modules/sales/sales_module.hpp"
 
 namespace RootModule {
-void root() {
-  std::vector<std::string> tab_values{
-      "tab_1",
-      "tab_2",
-      "tab_3",
-  };
-  int tab_selected = 0;
-  auto tab_toggle = ftxui::Toggle(&tab_values, &tab_selected);
+void screen() {
+  auto screen = ftxui::ScreenInteractive::Fullscreen();
 
-  std::vector<std::string> tab_1_entries{
-      "Forest",
-      "Water",
-      "I don't know",
+  int currentTab = 0;
+  std::vector<std::string> tabs{
+      "Vendas",
+      "Clientes",
+      "Motoristas",
   };
-  int tab_1_selected = 0;
 
-  std::vector<std::string> tab_2_entries{
-      "Hello",
-      "Hi",
-      "Hay",
-  };
-  int tab_2_selected = 0;
-
-  std::vector<std::string> tab_3_entries{
-      "Table",
-      "Nothing",
-      "Is",
-      "Empty",
-  };
-  int tab_3_selected = 0;
-  auto tab_container = ftxui::Container::Tab(
+  auto tabToggleComponent = ftxui::Toggle(&tabs, &currentTab);
+  auto tabContainerComponent = ftxui::Container::Tab(
       {
-          ftxui::Radiobox(&tab_1_entries, &tab_1_selected),
-          ftxui::Radiobox(&tab_2_entries, &tab_2_selected),
-          ftxui::Radiobox(&tab_3_entries, &tab_3_selected),
+          SalesModule::page(),
+          ClientsModule::page(),
+          ChauffeurModule::page(),
       },
-      &tab_selected);
+      &currentTab);
 
-  auto container = ftxui::Container::Vertical({
-      tab_toggle,
-      tab_container,
+  auto containerComponent = ftxui::Container::Vertical({
+      tabToggleComponent,
+      tabContainerComponent,
   });
 
-  auto renderer = Renderer(container, [&] {
+  auto renderer = Renderer(containerComponent, [&] {
     return ftxui::vbox({
-               tab_toggle->Render(),
+               tabToggleComponent->Render(),
                ftxui::separator(),
-               tab_container->Render(),
+               tabContainerComponent->Render(),
            }) |
            ftxui::border;
   });
 
-  auto screen = ftxui::ScreenInteractive::TerminalOutput();
   screen.Loop(renderer);
 }
 }  // namespace RootModule
