@@ -41,7 +41,8 @@ void screen() {
     return ftxui::vbox({
                tabToggleComponent->Render(),
                ftxui::separator(),
-               tabContainerComponent->Render(),
+               tabContainerComponent->Render() | ftxui::frame |
+                   ftxui::size(ftxui::HEIGHT, ftxui::LESS_THAN, 10),
            }) |
            ftxui::border;
   });
